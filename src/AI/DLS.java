@@ -16,9 +16,6 @@ public class DLS extends DFS{
 
     @Override
     public boolean search(Node startNode) {
-        Stack<Node> frontier = new Stack<Node>();
-        Hashtable<String, Boolean> inFrontier = new Hashtable<>();
-        Hashtable<String, Boolean> explored = new Hashtable<>();
         if (startNode.isGoal()) {
             System.out.println("score : " + startNode.sum);
             printResult(startNode, 0);

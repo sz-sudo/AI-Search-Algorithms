@@ -33,9 +33,10 @@ public class main {
         Hashtable<String, Boolean> initHash = new Hashtable<>();
         initHash.put(Cell.getStart().toString(), true);
         Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, initHash);
+        Node goal = new Node(Cell.getGoal(), 0, 0, gameBoard, null, initHash);
 
-        //BFS bfs = new BFS();
-        //bfs.search(start);
+        BFS bfs = new BFS();
+        bfs.search(start);
 
         //DFS dfs = new DFS();
         //dfs.search(start);
@@ -43,7 +44,7 @@ public class main {
         //DLS dls = new DLS(columns*rows);
         //dls.search(start);
 
-        IDS ids = new IDS(  columns*rows, gameBoard, initHash);
-        ids.search();
+        //IDS ids = new IDS(  columns*rows, gameBoard, initHash);
+        //ids.search();
     }
 }

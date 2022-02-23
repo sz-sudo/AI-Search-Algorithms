@@ -8,11 +8,13 @@ import model.Node;
 
 public class DFS {
     protected int currDepth =0;
+    protected Stack <Node> frontier = new Stack<Node>();
+    protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
+    protected Hashtable<String, Boolean> explored = new Hashtable<>();
+
 
     public boolean search(Node startNode) {
-        Stack <Node> frontier = new Stack<Node>();
-        Hashtable<String, Boolean> inFrontier = new Hashtable<>();
-        Hashtable<String, Boolean> explored = new Hashtable<>();
+
 
         if (startNode.isGoal()) {
             System.out.println("score : " + startNode.sum);
@@ -49,6 +51,31 @@ public class DFS {
         System.out.println("no solution");
         return false;
     }
+
+    public Stack<Node> getFrontier() {
+        return frontier;
+    }
+
+    public void setFrontier(Stack<Node> frontier) {
+        this.frontier = frontier;
+    }
+
+    public Hashtable<String, Boolean> getInFrontier() {
+        return inFrontier;
+    }
+
+    public void setInFrontier(Hashtable<String, Boolean> inFrontier) {
+        this.inFrontier = inFrontier;
+    }
+
+    public Hashtable<String, Boolean> getExplored() {
+        return explored;
+    }
+
+    public void setExplored(Hashtable<String, Boolean> explored) {
+        this.explored = explored;
+    }
+
 
     public void printResult(Node node, int depthCounter) {
         if (node.parent == null) {

@@ -9,10 +9,11 @@ import java.util.Queue;
 
 public class BFS {
 
+    protected Queue<Node> frontier = new LinkedList<Node>();
+    protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
+    protected Hashtable<String, Boolean> explored = new Hashtable<>();
+
     public void search(Node startNode) {
-        Queue<Node> frontier = new LinkedList<Node>();
-        Hashtable<String, Boolean> inFrontier = new Hashtable<>();
-        Hashtable<String, Boolean> explored = new Hashtable<>();
 
         if (startNode.isGoal()) {
             System.out.println("score : " + startNode.sum);
@@ -48,6 +49,30 @@ public class BFS {
 
         System.out.println("no solution");
 
+    }
+
+    public Queue<Node> getFrontier() {
+        return frontier;
+    }
+
+    public void setFrontier(Queue<Node> frontier) {
+        this.frontier = frontier;
+    }
+
+    public Hashtable<String, Boolean> getInFrontier() {
+        return inFrontier;
+    }
+
+    public void setInFrontier(Hashtable<String, Boolean> inFrontier) {
+        this.inFrontier = inFrontier;
+    }
+
+    public Hashtable<String, Boolean> getExplored() {
+        return explored;
+    }
+
+    public void setExplored(Hashtable<String, Boolean> explored) {
+        this.explored = explored;
     }
 
     public void printResult(Node node, int depthCounter) {
