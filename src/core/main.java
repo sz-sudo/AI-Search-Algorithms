@@ -1,6 +1,8 @@
 package core;
 
 import AI.BFS;
+import AI.DFS;
+import AI.DLS;
 import AI.IDS;
 import model.Board;
 import model.Cell;
@@ -34,6 +36,12 @@ public class main {
 
         //BFS bfs = new BFS();
         //bfs.search(start);
+
+        //DFS dfs = new DFS();
+        //dfs.search(start);
+
+        //DLS dls = new DLS(columns*rows);
+        //dls.search(start);
 
         IDS ids = new IDS(  columns*rows, gameBoard, initHash);
         ids.search();
