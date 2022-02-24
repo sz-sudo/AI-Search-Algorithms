@@ -57,10 +57,11 @@ public class BDS {
                         if ( (child.currentCell.getI() == child2.currentCell.getI()) &&
                                 (child.currentCell.getJ() == child2.currentCell.getJ()) ) {
                             System.out.println("first one");
-                            System.out.println(startNode.sum);
-                            System.out.println(goalNode.sum);
+
                             if ((startNode.sum + goalNode.sum + child.sum + child2.sum) >= startNode.getGoalValue()) {
                                 System.out.println("second one");
+                                System.out.println("I: " + child.currentCell.getI());
+                                System.out.println("J: " + child.currentCell.getJ());
                                 printResult(child, 0);
                                 printResult(child2, 0);
                                 System.out.println(child.sum + child2.sum);
