@@ -186,6 +186,15 @@ public class Node {
 
     }
 
+
+    public int getGoalValue() {
+        return goalValue;
+    }
+
+    public void setGoalValue(int goalValue) {
+        this.goalValue = goalValue;
+    }
+
     public int getDepth() {
         return depth;
     }

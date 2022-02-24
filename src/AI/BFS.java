@@ -18,6 +18,7 @@ public class BFS {
 
     public void search(Node startNode) {
 
+
         if (startNode.isGoal()) {
             System.out.println("score : " + startNode.sum);
             printResult(startNode, 0);
