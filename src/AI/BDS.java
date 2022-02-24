@@ -50,9 +50,16 @@ public class BDS {
                 if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
 
                     for (Node child2 : childrenRev) {
-                        if (child.hash().equals(child2.hash())) {
+                        //System.out.println(child.hash());
+                        //System.out.println(child2.hash());
+
+                        //if (child.hash().equals(child2.hash())) {
+                        if ( (child.currentCell.getI() == child2.currentCell.getI()) &&
+                                (child.currentCell.getJ() == child2.currentCell.getJ()) ) {
                             System.out.println("first one");
-                            if ((startNode.sum + goalNode.sum) >= startNode.getGoalValue()) {
+                            System.out.println(startNode.sum);
+                            System.out.println(goalNode.sum);
+                            if ((startNode.sum + goalNode.sum + child.sum + child2.sum) >= startNode.getGoalValue()) {
                                 System.out.println("second one");
                                 printResult(child, 0);
                                 printResult(child2, 0);
