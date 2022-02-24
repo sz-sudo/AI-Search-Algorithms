@@ -1,11 +1,14 @@
 package AI;
 
-import model.Node;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Queue;
+
+
+import model.Node;
+
 
 public class BFS {
 

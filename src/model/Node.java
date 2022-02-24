@@ -120,6 +120,13 @@ public class Node {
         return false;
     }
 
+    public boolean isStart() {
+        if (currentCell.getOperationType() == OPERATION_TYPE.START) {
+            return sum >= goalValue;
+        }
+        return false;
+    }
+
     public int pathCost() {
         return switch (currentCell.getOperationType()) {
             case MINUS, DECREASE_GOAL -> 1;
