@@ -55,29 +55,6 @@ public class BFS {
 
     }
 
-    public Queue<Node> getFrontier() {
-        return frontier;
-    }
-
-    public void setFrontier(Queue<Node> frontier) {
-        this.frontier = frontier;
-    }
-
-    public Hashtable<String, Boolean> getInFrontier() {
-        return inFrontier;
-    }
-
-    public void setInFrontier(Hashtable<String, Boolean> inFrontier) {
-        this.inFrontier = inFrontier;
-    }
-
-    public Hashtable<String, Boolean> getExplored() {
-        return explored;
-    }
-
-    public void setExplored(Hashtable<String, Boolean> explored) {
-        this.explored = explored;
-    }
 
     public void printResult(Node node, int depthCounter) {
         if (node.parent == null) {

@@ -28,10 +28,12 @@ public class main {
         Cell[][] cells = mapper.createCells(board, rows, columns);
         Board gameBoard = mapper.createBoard(cells, rows, columns);
         Hashtable<String, Boolean> initHash = new Hashtable<>();
+        Hashtable<String, Boolean> initHash2 = new Hashtable<>();
         initHash.put(Cell.getStart().toString(), true);
         Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, initHash);
-        Node goal = new Node(Cell.getGoal(), 1, Cell.getGoal().getValue(), gameBoard, null, initHash);
 
+        Node goal = new Node(Cell.getGoal(), 1, Cell.getGoal().getValue(), gameBoard, null, initHash2);
+        goal.setImmutePath(true);
         //BFS bfs = new BFS();
         //bfs.search(start);
 

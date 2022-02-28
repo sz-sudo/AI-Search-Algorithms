@@ -14,7 +14,7 @@ public class Node {
     private int goalValue;
     private int depth = 0;
     private Hashtable<String, Boolean> repeatedStates;
-
+    private boolean immutePath =false;
     public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, Hashtable<String, Boolean> repeated) {
         this.currentCell = currentCell;
         this.sum = currentValue;
@@ -29,7 +29,24 @@ public class Node {
 
         repeated.put(this.toString(), true);
     }
+    public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, Hashtable<String, Boolean> repeated,boolean immutePath) {
+        this.immutePath=immutePath;
+        this.currentCell = currentCell;
+        this.sum = currentValue;
+        this.board = board;
+        this.cells = board.getCells();
+        this.parent = parent;
+        this.goalValue = goalValue;
+        Hashtable<String, Boolean> hashtableTemp = new Hashtable<String, Boolean>(repeated);
+        hashtableTemp.put(this.toString(), true);
+        this.repeatedStates = hashtableTemp;
+        setGoalValue();
+        repeated.put(this.toString(), true);
+    }
 
+    public void setImmutePath(boolean immutePath) {
+        this.immutePath = immutePath;
+    }
 
     public ArrayList<Node> successor() {
         ArrayList<Node> result = new ArrayList<Node>();
@@ -37,7 +54,7 @@ public class Node {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
             if (isValidMove(rightCell)) {
                 int calculatedValue = calculate(rightCell);
-                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates);
+                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates,immutePath);
                 result.add(rightNode);
             }
         }
@@ -45,7 +62,7 @@ public class Node {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
             if (isValidMove(leftCell)) {
                 int calculatedValue = calculate(leftCell);
-                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates);
+                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates,immutePath);
                 result.add(leftNode);
             }
         }
@@ -53,7 +70,7 @@ public class Node {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
             if (isValidMove(downCell)) {
                 int calculatedValue = calculate(downCell);
-                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates);
+                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates,immutePath);
                 result.add(downNode);
             }
 
@@ -62,7 +79,7 @@ public class Node {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
             if (isValidMove(upCell)) {
                 int calculatedValue = calculate(upCell);
-                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates);
+                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates,immutePath);
                 result.add(upNode);
             }
         }
@@ -78,7 +95,7 @@ public class Node {
     }
 
 
-    private int calculate(Cell cell) {
+    public int calculate(Cell cell) {
         return switch (cell.getOperationType()) {
             case MINUS -> sum - cell.getValue();
             case ADD -> sum + cell.getValue();
@@ -89,6 +106,16 @@ public class Node {
 
     }
 
+    public int calculate(Cell cell,int customVal) {
+        return switch (cell.getOperationType()) {
+            case MINUS -> customVal - cell.getValue();
+            case ADD -> customVal + cell.getValue();
+            case POW -> (int) Math.pow(customVal, cell.getValue());
+            case MULT -> customVal * cell.getValue();
+            default -> customVal;
+        };
+
+    }
     private boolean isWall(Cell cell) {
         return cell.getOperationType() == OPERATION_TYPE.WALL;
     }
@@ -191,10 +218,6 @@ public class Node {
         return goalValue;
     }
 
-    public void setGoalValue(int goalValue) {
-        this.goalValue = goalValue;
-    }
-
     public int getDepth() {
         return depth;
     }
@@ -204,6 +227,8 @@ public class Node {
     }
 
     private void setGoalValue() {
+        if(immutePath)
+            return;
         if (currentCell.getOperationType() == OPERATION_TYPE.DECREASE_GOAL)
             goalValue -= currentCell.getValue();
         if (currentCell.getOperationType() == OPERATION_TYPE.INCREASE_GOAL)
