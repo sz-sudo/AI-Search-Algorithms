@@ -58,7 +58,7 @@ public class BDS {
                                 (child.currentCell.getJ() == child2.currentCell.getJ()) ) {
                             System.out.println("first one");
 
-                            if ((startNode.sum + goalNode.sum + child.sum + child2.sum) >= startNode.getGoalValue()) {
+                            if ((startNode.sum + goalNode.sum + child.sum ) >= startNode.getGoalValue()) {
                                 System.out.println("second one");
                                 System.out.println("I: " + child.currentCell.getI());
                                 System.out.println("J: " + child.currentCell.getJ());
@@ -68,13 +68,16 @@ public class BDS {
                                 return;
                             }
                         }
-                        frontierRev.add(child2);
-                        inFrontierRev.put(child2.hash(), true);
+
                     }
 
                     frontier.add(child);
                     inFrontier.put(child.hash(), true);
                 }
+            }
+            for (Node child2 : childrenRev) {
+                frontierRev.add(child2);
+                inFrontierRev.put(child2.hash(), true);
             }
         }
 
