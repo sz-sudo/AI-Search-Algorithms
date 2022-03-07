@@ -48,8 +48,8 @@ public class BDS {
                     if(Bfringe.containsKey(child.currentCell.toString())){
                         for (Node intercourse : Bfringe.get(child.currentCell.toString())){
                             if(checkGoal(child,intercourse,startNode)) {
-                                printResult(child, 0);
                                 printResult(intercourse, 0);
+                                printResult(child, 0);
                                 return;
                             }
                         }
@@ -62,8 +62,8 @@ public class BDS {
                     if(fringe.containsKey(Bchild.currentCell.toString())){
                         for (Node intercourse : fringe.get(Bchild.currentCell.toString())){
                             if(checkGoal(intercourse,Bchild,startNode)) {
-                                printResult(intercourse, 0);
                                 printResult(Bchild, 0);
+                                printResult(intercourse, 0);
                                 return;
                             }
                         }
