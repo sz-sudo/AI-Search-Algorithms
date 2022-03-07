@@ -11,10 +11,10 @@ public class DFS {
     protected Stack <Node> frontier = new Stack<Node>();
     protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
     protected Hashtable<String, Boolean> explored = new Hashtable<>();
+    protected Stack<String> exp = new Stack<>();
 
 
     public boolean search(Node startNode) {
-
 
         if (startNode.isGoal()) {
             System.out.println("score : " + startNode.sum);
@@ -25,24 +25,38 @@ public class DFS {
         frontier.push(startNode);
         inFrontier.put(startNode.hash(), true);
 
+        boolean first = true;
         while (!frontier.isEmpty()) {
             Node temp = frontier.pop();
-            currDepth =temp.getDepth();
+            if (!first) {
+
+                while (!temp.parent.hash().equals(exp.peek())) {
+                    System.out.println("kir shodim");
+                    exp.pop();
+                }
+            }
+
+            currDepth = temp.getDepth();
             inFrontier.remove(temp.hash());
 
             explored.put(temp.hash(), true);
+            exp.push(temp.hash());
+            first = false;
 
             ArrayList<Node> children = temp.successor();
             currDepth++;
 
             for (Node child : children) {
-                if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
+                if (!(inFrontier.containsKey(child.hash())) && !(exp.contains(child.hash()))) {
                     child.setDepth(currDepth);
+
                     if (child.isGoal()) {
+                        System.out.println("explored size : "+ explored.size());   // linear space complexity
                         printResult(child, 0);
                         System.out.println(child.sum);
                         return true;
                     }
+
                     frontier.push(child);
                     inFrontier.put(child.hash(), true);
                 }

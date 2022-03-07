@@ -46,7 +46,7 @@ public class DLS extends DFS{
             for (Node child : children) {
                 if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
                     child.setDepth(currDepth+1);
-                    if (child.isGoal() && maxDepth>=child.getDepth() ) {
+                    if ( child.isGoal() && maxDepth >= child.getDepth() ) {
                         printResult(child, 0);
                         System.out.println(child.sum);
                         //System.out.println(currDepth);

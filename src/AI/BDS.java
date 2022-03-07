@@ -2,10 +2,7 @@ package AI;
 
 import model.Node;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class BDS {
 
@@ -46,39 +43,41 @@ public class BDS {
             exploredRev.put(tempRev.hash(), true);
             ArrayList<Node> childrenRev = tempRev.successor();
 
+            for (Node child2 : childrenRev) {
+                if (!(inFrontierRev.containsKey(child2.hash())) && !(exploredRev.containsKey(child2.hash()))) {
+                    frontierRev.add(child2);
+                    inFrontierRev.put(child2.hash(), true);
+                }
+            }
+
             for (Node child : children) {
                 if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
-
-                    for (Node child2 : childrenRev) {
-                        //System.out.println(child.hash());
-                        //System.out.println(child2.hash());
-
-                        //if (child.hash().equals(child2.hash())) {
-                        if ( (child.currentCell.getI() == child2.currentCell.getI()) &&
-                                (child.currentCell.getJ() == child2.currentCell.getJ()) ) {
-                            System.out.println("first one");
-
-                            if ((startNode.sum + goalNode.sum + child.sum ) >= startNode.getGoalValue()) {
-                                System.out.println("second one");
-                                System.out.println("I: " + child.currentCell.getI());
-                                System.out.println("J: " + child.currentCell.getJ());
-                                printResult(child, 0);
-                                printResult(child2, 0);
-                                System.out.println(child.sum + child2.sum);
-                                return;
-                            }
-                        }
-
-                    }
-
                     frontier.add(child);
                     inFrontier.put(child.hash(), true);
                 }
             }
-            for (Node child2 : childrenRev) {
-                frontierRev.add(child2);
-                inFrontierRev.put(child2.hash(), true);
+
+            for (Node child : frontier){
+                for (Node child2 : frontier) {
+                    if (child.currentCell.getJ() == child2.currentCell.getJ()) {
+                        if (child.currentCell.getI() == child2.currentCell.getI()) {
+                            if (checkGoal(child2, child.sum, startNode.getGoalValue())) {
+                                debufpath(child);
+                                System.out.println("second one");
+                                debufpath(child2);
+                                System.out.println("I: " + child.currentCell.getI());
+                                System.out.println("J: " + child.currentCell.getJ());
+                                printResult(child, 0);
+                                printResult(child2, 0);
+//                                System.out.println(child.sum + child2.sum);
+                                return;
+//                            }
+                            }
+                        }
+                    }
+                }
             }
+
         }
 
         System.out.println("no solution");
@@ -95,6 +94,24 @@ public class BDS {
         node.drawState();
         printResult(node.parent, depthCounter + 1);
     }
+    public boolean checkGoal(Node node,int lastInt,int goal){
 
+        int sum=lastInt;
+        while (node.parent!=null){
+            node=node.parent;
+            sum = node.calculate(node.currentCell,sum);
+        }
+        if(goal<=sum)
+            return true;
+        else return false;
+    }
 
+    public void debufpath(Node st){
+        System.out.println(st.currentCell);
+        System.out.println("i,j"+ st.currentCell.toString());
+        while (st.parent!=null){
+            st=st.parent;
+            System.out.println("i,j"+ st.currentCell.toString());
+        }
+    }
 }

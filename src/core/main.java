@@ -29,14 +29,19 @@ public class main {
         Board gameBoard = mapper.createBoard(cells, rows, columns);
         Hashtable<String, Boolean> initHash = new Hashtable<>();
         initHash.put(Cell.getStart().toString(), true);
+
+        Hashtable<String, Boolean> initHashGoal = new Hashtable<>();
+
         Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, initHash);
-        Node goal = new Node(Cell.getGoal(), 1, Cell.getGoal().getValue(), gameBoard, null, initHash);
+        Node goal = new Node(Cell.getGoal(), 1, Cell.getGoal().getValue(), gameBoard, null, initHashGoal);
+        goal.setlockGoal(true);
+
 
         //BFS bfs = new BFS();
         //bfs.search(start);
 
-        //DFS dfs = new DFS();
-        //dfs.search(start);
+        DFS dfs = new DFS();
+        dfs.search(start);
 
         //DLS dls = new DLS(columns*rows);
         //dls.search(start);
@@ -44,7 +49,7 @@ public class main {
         //IDS ids = new IDS(  columns*rows, gameBoard, initHash);
         //ids.search();
 
-        BDS bds = new BDS();
-        bds.search(start, goal);
+        //BDS bds = new BDS();
+        //bds.search(start, goal);
     }
 }
