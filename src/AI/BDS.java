@@ -6,20 +6,21 @@ import java.util.*;
 
 public class BDS {
 
-    // for the search from start to goal
+    protected Hashtable<String,ArrayList<Node>> fringe=new Hashtable<>();
+    protected Hashtable<String,ArrayList<Node>> Bfringe=new Hashtable<>();
+
+
     protected Queue<Node> frontier = new LinkedList<Node>();
     protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
     protected Hashtable<String, Boolean> explored = new Hashtable<>();
 
-    // for the search from goal to start
-    protected Queue<Node> frontierRev = new LinkedList<Node>();
-    protected Hashtable<String, Boolean> inFrontierRev = new Hashtable<>();
-    protected Hashtable<String, Boolean> exploredRev = new Hashtable<>();
+    protected Queue<Node> Bfrontier = new LinkedList<Node>();
+    protected Hashtable<String, Boolean> BinFrontier = new Hashtable<>();
+    protected Hashtable<String, Boolean> Bexplored = new Hashtable<>();
 
     public void search(Node startNode, Node goalNode) {
 
-
-        if (startNode.isGoal() || startNode.isStart()) {
+        if (startNode.isGoal()|| goalNode.isStart()) {
             System.out.println("score : " + startNode.sum);
             printResult(startNode, 0);
             return;
@@ -27,76 +28,54 @@ public class BDS {
 
         frontier.add(startNode);
         inFrontier.put(startNode.hash(), true);
+        Bfrontier.add(goalNode);
+        BinFrontier.put(goalNode.hash(), true);
 
-        frontierRev.add(goalNode);
-        inFrontierRev.put(goalNode.hash(), true);
-
-        while (!frontier.isEmpty() && !frontierRev.isEmpty()) {
+        while (!frontier.isEmpty() && !Bfrontier.isEmpty()) {
 
             Node temp = frontier.poll();
             inFrontier.remove(temp.hash());
             explored.put(temp.hash(), true);
+
+            Node Btemp = Bfrontier.poll();
+            BinFrontier.remove(Btemp.hash());
+            Bexplored.put(Btemp.hash(), true);
+
             ArrayList<Node> children = temp.successor();
-
-            Node tempRev = frontierRev.poll();
-            inFrontierRev.remove(tempRev.hash());
-            exploredRev.put(tempRev.hash(), true);
-            ArrayList<Node> childrenRev = tempRev.successor();
-
-            for (Node child2 : childrenRev) {
-                if (!(inFrontierRev.containsKey(child2.hash())) && !(exploredRev.containsKey(child2.hash()))) {
-                    frontierRev.add(child2);
-                    inFrontierRev.put(child2.hash(), true);
-                }
-            }
+            ArrayList<Node> Bchildren = Btemp.successor();
 
             for (Node child : children) {
-                if (!(inFrontier.containsKey(child.hash())) && !(explored.containsKey(child.hash()))) {
-                    frontier.add(child);
-                    inFrontier.put(child.hash(), true);
-                }
-            }
-
-            for (Node child : frontier){
-                for (Node child2 : frontier) {
-                    if (child.currentCell.getJ() == child2.currentCell.getJ()) {
-                        if (child.currentCell.getI() == child2.currentCell.getI()) {
-                            if (checkGoal(child2, child.sum, startNode.getGoalValue())) {
-                                debufpath(child);
-                                System.out.println("second one");
-                                debufpath(child2);
-                                System.out.println("I: " + child.currentCell.getI());
-                                System.out.println("J: " + child.currentCell.getJ());
+                    if(Bfringe.containsKey(child.currentCell.toString())){
+                        for (Node intercourse : Bfringe.get(child.currentCell.toString())){
+                            if(checkGoal(child,intercourse,startNode)) {
                                 printResult(child, 0);
-//                                printResult(child2, 0);
-//                                System.out.println(child.sum + child2.sum);
+                                printResult(intercourse, 0);
                                 return;
-//                            }
                             }
                         }
                     }
-                }
+                    addValueForKey(child.currentCell.toString(),child,fringe);
+                    frontier.add(child);
+                    inFrontier.put(child.hash(), true);
             }
-            //            for (Node child:children){
-//                for (Node child2 : childrenRev){
-//                        if ( (child.currentCell.getI() == child2.currentCell.getI()) &&
-//                                (child.currentCell.getJ() == child2.currentCell.getJ()) ) {
-//                            if (checkGoal(child2,child.sum,startNode.getGoalValue())) {
-//                                debufpath(child);
-//                                System.out.println("second one");
-//                                debufpath(child2);
-//                                System.out.println("I: " + child.currentCell.getI());
-//                                System.out.println("J: " + child.currentCell.getJ());
-//                                printResult(child, 0);
-////                                printResult(child2, 0);
-////                                System.out.println(child.sum + child2.sum);
-//                                return;
-//                            }
-//                    }
-//                }
-//            }
-        }
+            for (Node Bchild : Bchildren) {
+                    if(fringe.containsKey(Bchild.currentCell.toString())){
+                        for (Node intercourse : fringe.get(Bchild.currentCell.toString())){
+                            if(checkGoal(intercourse,Bchild,startNode)) {
+                                printResult(intercourse, 0);
+                                printResult(Bchild, 0);
+                                return;
+                            }
+                        }
+                    }
+                    addValueForKey(Bchild.currentCell.toString(),Bchild,Bfringe);
+                    Bfrontier.add(Bchild);
+                    BinFrontier.put(Bchild.hash(), true);
+            }
+            removeValueForKey(temp.currentCell.toString(),temp,fringe);
+            removeValueForKey(Btemp.currentCell.toString(),Btemp,Bfringe);
 
+        }
         System.out.println("no solution");
 
     }
@@ -106,29 +85,41 @@ public class BDS {
             System.out.println("problem solved at a depth of  : " + depthCounter);
             return;
         }
-
-        System.out.println(node.toString());
-        node.drawState();
+        System.out.println(node);
+//        node.drawState();
         printResult(node.parent, depthCounter + 1);
     }
-    public boolean checkGoal(Node node,int lastInt,int goal){
 
-        int sum=lastInt;
-        while (node.parent!=null){
-            node=node.parent;
-            sum = node.calculate(node.currentCell,sum);
+    private void addValueForKey(String key,Node value,Hashtable<String,ArrayList<Node>> myHashMap) {
+        ArrayList<Node> values = myHashMap.get(key);
+        if(values == null ){
+            values=new ArrayList<Node>();
+            values.add( value );
+            myHashMap.put(key,values);
+            return;
         }
-        if(goal<=sum)
-            return true;
-        else return false;
+        values.add( value );
     }
-
-    public void debufpath(Node st){
-        System.out.println(st.currentCell);
-        System.out.println("i,j"+ st.currentCell.toString());
-        while (st.parent!=null){
-            st=st.parent;
-            System.out.println("i,j"+ st.currentCell.toString());
+    private void removeValueForKey(String key,Node value,Hashtable<String,ArrayList<Node>> myHashMap) {
+        ArrayList<Node> values = myHashMap.get( key );
+        if(values!=null)
+            values.removeIf(n->n.hash().equals(value.hash()));
+    }
+    private boolean checkGoal(Node forward,Node backward,Node start){
+        int sum = forward.sum;
+        Node i ;
+        int goal = -start.getGoalValue()+forward.parent.getGoalValue()+backward.getGoalValue();
+        for (i=backward.parent; i.parent!=null ; i=i.parent) {
+            if(forward.isRepeated(i))
+                return false;
+            sum=i.calculate(i.currentCell,sum);
         }
+//            printResult(forward,0);
+//            printResult(backward,0);
+//        System.out.println(sum + "  dsd a a a ");
+        if(goal<=sum){
+            System.out.println(sum+ " " + goal);
+        }
+        return goal<=sum;
     }
 }
