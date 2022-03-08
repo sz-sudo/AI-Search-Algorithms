@@ -53,9 +53,12 @@ public class main {
 
 //        BDS bds = new BDS();
 //        bds.search(start, goal);
+//
+//        A_Star as = new A_Star();
+//        as.search(start);
 
-        A_Star as = new A_Star();
-        as.search(start);
+        IDA_Star idas = new IDA_Star();
+        idas.search(start);
 
     }
 }
