@@ -12,7 +12,8 @@ public class Node {
     private Cell[][] cells;
     private int goalValue;
     private int depth = 0;
-    private Hashtable<String, Boolean> repeatedStates;
+    private int cost = 0;
+    public Hashtable<String, Boolean> repeatedStates;
     //private boolean lockGoal = false;
 
 
@@ -23,6 +24,7 @@ public class Node {
         this.cells = board.getCells();
         this.parent = parent;
         this.goalValue = goalValue;
+        this.cost = 0;
         Hashtable<String, Boolean> hashtableTemp = new Hashtable<String, Boolean>(repeated);
         hashtableTemp.put(this.toString(), true);
         this.repeatedStates = hashtableTemp;
@@ -130,12 +132,10 @@ public class Node {
 
     public int calculateRev(Cell cell) {
         return switch (cell.getOperationType()) {
-            case MINUS -> sum + cell.getValue();
-            case ADD -> sum - cell.getValue();
+            case MINUS, INCREASE_GOAL -> sum + cell.getValue();
+            case ADD, DECREASE_GOAL -> sum - cell.getValue();
             case POW -> (int) Math.ceil(Math.pow(sum, 1/cell.getValue()));
             case MULT -> (int) Math.ceil(sum / cell.getValue());
-            case INCREASE_GOAL -> sum + cell.getValue();
-            case DECREASE_GOAL -> sum - cell.getValue();
             default -> sum;
         };
     }
@@ -188,20 +188,27 @@ public class Node {
         return false;
     }
 
+    public int getCost() {
+        return cost;
+    }
+
+    public void setCost(int cost) {
+        this.cost += cost;
+    }
+
     public int pathCost() {
         return switch (currentCell.getOperationType()) {
-            case MINUS, DECREASE_GOAL -> 1;
-            case ADD, INCREASE_GOAL -> 2;
-            case MULT -> 3;
-            case POW -> 4;
+            case MINUS, INCREASE_GOAL, GOAL -> 1;
+            case ADD, DECREASE_GOAL -> 2;
+            case MULT -> 5;
+            case POW -> 11;
             default -> 0;
         };
 
     }
 
-    private int heuristic() {
-        // TODO: 2/16/2022 implement heuristic function
-        return 0;
+    public int heuristic() {
+        return ( Math.abs(Cell.getGoal().j - currentCell.i) + Math.abs(Cell.getGoal().j - currentCell.j) ) ;
     }
 
     public String hash() {
@@ -219,6 +226,8 @@ public class Node {
 
         return hash.toString();
     }
+
+
     public String newHash() {
         StringBuilder hash = new StringBuilder();
         hash.append("i:")
@@ -273,6 +282,16 @@ public class Node {
         this.depth = depth;
     }
 
+    public Hashtable<String, Boolean> getRepeatedStates() {
+        if (this.repeatedStates == null)
+            return new Hashtable<String, Boolean>();
+        return repeatedStates;
+    }
+
+    public void setRepeatedStates(Hashtable<String, Boolean> repeatedStates) {
+        this.repeatedStates = repeatedStates;
+    }
+
     private void setGoalValue() {
 
         if (currentCell.getOperationType() == OPERATION_TYPE.DECREASE_GOAL)
@@ -295,7 +314,7 @@ public class Node {
         return "(" + this.currentCell.i + "," + this.currentCell.j + ")";
     }
 
-    public String toString(boolean ...x) {
-        return "(" + (this.currentCell.i+1) + "," + (this.currentCell.j+1) + ")";
-    }
+//    public String toString(boolean ...x) {
+//        return "(" + (this.currentCell.i+1) + "," + (this.currentCell.j+1) + ")";
+//    }
 }

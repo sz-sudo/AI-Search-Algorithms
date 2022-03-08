@@ -5,15 +5,13 @@ import model.Node;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-public class A_Star {
+public class IDA_Star {
 
     protected ArrayList<Node> frontier = new ArrayList();
     protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
     protected Hashtable<String, Boolean> explored = new Hashtable<>();
 
-
     public void search(Node startNode) {
-
 
 
         frontier.add(startNode);
@@ -65,6 +63,7 @@ public class A_Star {
 
     }
 
+
     public void printResult(Node node, int depthCounter) {
         if (node.parent == null) {
             System.out.println("problem solved at a depth of  : " + depthCounter);
@@ -75,5 +74,4 @@ public class A_Star {
         node.drawState();
         printResult(node.parent, depthCounter + 1);
     }
-
 }

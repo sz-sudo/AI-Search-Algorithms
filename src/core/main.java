@@ -28,7 +28,7 @@ public class main {
         Cell[][] cells = mapper.createCells(board, rows, columns);
         Board gameBoard = mapper.createBoard(cells, rows, columns);
         Hashtable<String, Boolean> initHash = new Hashtable<>();
-        initHash.put(Cell.getStart().toString(), true);
+        //initHash.put(Cell.getStart().toString(), true);
 
         Hashtable<String, Boolean> initHashGoal = new Hashtable<>();
 
@@ -51,7 +51,11 @@ public class main {
 //        IDS ids = new IDS(12, gameBoard, initHash);
 //        ids.search();
 
-        BDS bds = new BDS();
-        bds.search(start, goal);
+//        BDS bds = new BDS();
+//        bds.search(start, goal);
+
+        A_Star as = new A_Star();
+        as.search(start);
+
     }
 }

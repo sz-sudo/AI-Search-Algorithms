@@ -7,7 +7,7 @@ import java.util.Hashtable;
 import model.Node;
 
 public class DFS {
-    protected int currDepth =0;
+    protected int currDepth = 0;
     protected Stack <Node> frontier = new Stack<Node>();
     protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
     protected Hashtable<String, Boolean> explored = new Hashtable<>();
@@ -104,7 +104,7 @@ public class DFS {
             return;
         }
 
-        System.out.println(node.toString(true));
+        System.out.println(node.toString());
         node.drawState();
         printResult(node.parent, depthCounter + 1);
         //System.out.println(node.getDepth());

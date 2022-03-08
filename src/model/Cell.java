@@ -9,6 +9,8 @@ public class Cell {
     private static Cell start;
     private static Cell goal;
 
+
+
     public Cell(int i, int j, int value, String op) {
         this.i = i;
         this.j = j;
