@@ -16,22 +16,31 @@ public class DFS {
 
     public boolean search(Node startNode) {
 
-        if (startNode.isGoal()) {
-            System.out.println("score : " + startNode.sum);
-            printResult(startNode, 0);
-            return true;
-        }
-
         frontier.push(startNode);
         inFrontier.put(startNode.hash(), true);
 
         boolean first = true;
         while (!frontier.isEmpty()) {
-            Node temp = frontier.pop();
-            if (!first) {
 
+//            if (startNode.isGoal()) {
+//                System.out.println("score : " + startNode.sum);
+//                printResult(startNode, 0);
+//                return true;
+//            }
+
+            Node temp = frontier.pop();
+
+            if (temp.isGoal()) {
+                System.out.println("explored size : "+ exp.size());   // linear space complexity
+                printResult(temp, 0);
+                System.out.println(temp.sum);
+                return true;
+            }
+
+
+            if (!first) {
                 while (!temp.parent.hash().equals(exp.peek())) {
-                    System.out.println("kir shodim");
+                    //System.out.println("kir shodim");
                     exp.pop();
                 }
             }
@@ -39,23 +48,21 @@ public class DFS {
             currDepth = temp.getDepth();
             inFrontier.remove(temp.hash());
 
-            explored.put(temp.hash(), true);
+            //explored.put(temp.hash(), true);
             exp.push(temp.hash());
             first = false;
 
             ArrayList<Node> children = temp.successor();
+
+            //System.out.println(children);
+
             currDepth++;
 
             for (Node child : children) {
                 if (!(inFrontier.containsKey(child.hash())) && !(exp.contains(child.hash()))) {
                     child.setDepth(currDepth);
 
-                    if (child.isGoal()) {
-                        System.out.println("explored size : "+ explored.size());   // linear space complexity
-                        printResult(child, 0);
-                        System.out.println(child.sum);
-                        return true;
-                    }
+
 
                     frontier.push(child);
                     inFrontier.put(child.hash(), true);

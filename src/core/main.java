@@ -33,23 +33,25 @@ public class main {
         Hashtable<String, Boolean> initHashGoal = new Hashtable<>();
 
         Node start = new Node(Cell.getStart(), Cell.getStart().getValue(), Cell.getGoal().getValue(), gameBoard, null, initHash);
-        Node goal = new Node(Cell.getGoal(), 1, Cell.getGoal().getValue(), gameBoard, null, initHashGoal);
-        goal.setlockGoal(true);
+        //Node goal = new Node(Cell.getGoal(), 1, Cell.getGoal().getValue(), gameBoard, null, initHashGoal);
+        Node goal = new Node(Cell.getGoal(), Cell.getGoal().getValue(), Cell.getGoal().getValue(), gameBoard, null, initHash);
+        //goal.setlockGoal(true);
 
 
-        //BFS bfs = new BFS();
-        //bfs.search(start);
+//        BFS bfs = new BFS();
+//        bfs.search(start);
 
-        DFS dfs = new DFS();
-        dfs.search(start);
+//        DFS dfs = new DFS();
+//        dfs.search(start);
 
-        //DLS dls = new DLS(columns*rows);
-        //dls.search(start);
+//        DLS dls = new DLS(5);
+//        if (!dls.search(start))
+//            System.out.println("No Solution!");
+//
+//        IDS ids = new IDS(12, gameBoard, initHash);
+//        ids.search();
 
-        //IDS ids = new IDS(  columns*rows, gameBoard, initHash);
-        //ids.search();
-
-        //BDS bds = new BDS();
-        //bds.search(start, goal);
+        BDS bds = new BDS();
+        bds.search(start, goal);
     }
 }

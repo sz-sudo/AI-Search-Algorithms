@@ -13,7 +13,7 @@ public class Node {
     private int goalValue;
     private int depth = 0;
     private Hashtable<String, Boolean> repeatedStates;
-    private boolean lockGoal = false;
+    //private boolean lockGoal = false;
 
 
     public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, Hashtable<String, Boolean> repeated) {
@@ -30,24 +30,7 @@ public class Node {
 
         //repeated.put(this.toString(), true);
     }
-    public Node(Cell currentCell, int currentValue, int goalValue, Board board, Node parent, Hashtable<String, Boolean> repeated, boolean lockGoal) {
-        this.lockGoal = lockGoal;
-        this.currentCell = currentCell;
-        this.sum = currentValue;
-        this.board = board;
-        this.cells = board.getCells();
-        this.parent = parent;
-        this.goalValue = goalValue;
-        Hashtable<String, Boolean> hashtableTemp = new Hashtable<String, Boolean>(repeated);
-        hashtableTemp.put(this.toString(), true);
-        this.repeatedStates = hashtableTemp;
-        setGoalValue();
-        repeated.put(this.toString(), true);
-    }
 
-    public void setlockGoal(boolean lockGoal) {
-        this.lockGoal = lockGoal;
-    }
 
     public ArrayList<Node> successor() {
         ArrayList<Node> result = new ArrayList<Node>();
@@ -55,7 +38,7 @@ public class Node {
             Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
             if (isValidMove(rightCell)) {
                 int calculatedValue = calculate(rightCell);
-                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates, lockGoal);
+                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(rightNode);
             }
         }
@@ -63,7 +46,7 @@ public class Node {
             Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
             if (isValidMove(leftCell)) {
                 int calculatedValue = calculate(leftCell);
-                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates, lockGoal);
+                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(leftNode);
             }
         }
@@ -71,7 +54,7 @@ public class Node {
             Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
             if (isValidMove(downCell)) {
                 int calculatedValue = calculate(downCell);
-                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates, lockGoal);
+                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(downNode);
             }
 
@@ -80,7 +63,45 @@ public class Node {
             Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
             if (isValidMove(upCell)) {
                 int calculatedValue = calculate(upCell);
-                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates, lockGoal);
+                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates);
+                result.add(upNode);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Node> newSuccessor() {
+        ArrayList<Node> result = new ArrayList<Node>();
+        if (canMoveRight()) {
+            Cell rightCell = this.cells[this.currentCell.i][this.currentCell.j + 1];
+            if (isValidMove(rightCell)) {
+                int calculatedValue = calculateRev(currentCell);
+                Node rightNode = new Node(rightCell, calculatedValue, goalValue, board, this, repeatedStates);
+                result.add(rightNode);
+            }
+        }
+        if (canMoveLeft()) {
+            Cell leftCell = this.cells[this.currentCell.i][this.currentCell.j - 1];
+            if (isValidMove(leftCell)) {
+                int calculatedValue = calculateRev(currentCell);
+                Node leftNode = new Node(leftCell, calculatedValue, goalValue, board, this, repeatedStates);
+                result.add(leftNode);
+            }
+        }
+        if (canMoveDown()) {
+            Cell downCell = this.cells[this.currentCell.i + 1][this.currentCell.j];
+            if (isValidMove(downCell)) {
+                int calculatedValue = calculateRev(currentCell);
+                Node downNode = new Node(downCell, calculatedValue, goalValue, board, this, repeatedStates);
+                result.add(downNode);
+            }
+
+        }
+        if (canMoveUp()) {
+            Cell upCell = this.cells[this.currentCell.i - 1][this.currentCell.j];
+            if (isValidMove(upCell)) {
+                int calculatedValue = calculateRev(currentCell);
+                Node upNode = new Node(upCell, calculatedValue, goalValue, board, this, repeatedStates);
                 result.add(upNode);
             }
         }
@@ -107,6 +128,18 @@ public class Node {
 
     }
 
+    public int calculateRev(Cell cell) {
+        return switch (cell.getOperationType()) {
+            case MINUS -> sum + cell.getValue();
+            case ADD -> sum - cell.getValue();
+            case POW -> (int) Math.ceil(Math.pow(sum, 1/cell.getValue()));
+            case MULT -> (int) Math.ceil(sum / cell.getValue());
+            case INCREASE_GOAL -> sum + cell.getValue();
+            case DECREASE_GOAL -> sum - cell.getValue();
+            default -> sum;
+        };
+    }
+
     public int calculate(Cell cell,int customVal) {
         return switch (cell.getOperationType()) {
             case MINUS -> customVal - cell.getValue();
@@ -122,7 +155,7 @@ public class Node {
     }
 
     private boolean canMoveRight() {
-        return this.currentCell.j < this.board.getRow() - 1;
+        return this.currentCell.j < this.board.getCol() - 1;
     }
 
     private boolean canMoveLeft() {
@@ -134,7 +167,7 @@ public class Node {
     }
 
     private boolean canMoveDown() {
-        return this.currentCell.i < this.board.getCol() - 1;
+        return this.currentCell.i < this.board.getRow() - 1;
     }
 
     private Boolean isValidMove(Cell destCell) {
@@ -186,6 +219,19 @@ public class Node {
 
         return hash.toString();
     }
+    public String newHash() {
+        StringBuilder hash = new StringBuilder();
+        hash.append("i:")
+                .append(currentCell.i)
+                .append("j:")
+                .append(currentCell.j)
+                .append("op:")
+                .append(currentCell.op)
+                .append("val:")
+                .append(currentCell.getValue());
+
+        return hash.toString();
+    }
 
     public void drawState() {
 
@@ -228,8 +274,7 @@ public class Node {
     }
 
     private void setGoalValue() {
-        if(lockGoal)
-            return;
+
         if (currentCell.getOperationType() == OPERATION_TYPE.DECREASE_GOAL)
             goalValue -= currentCell.getValue();
         if (currentCell.getOperationType() == OPERATION_TYPE.INCREASE_GOAL)
