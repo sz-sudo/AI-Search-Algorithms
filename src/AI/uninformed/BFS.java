@@ -1,4 +1,4 @@
-package AI;
+package AI.uninformed;
 
 
 import java.util.ArrayList;

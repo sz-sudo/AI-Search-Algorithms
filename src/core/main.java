@@ -1,6 +1,8 @@
 package core;
 
-import AI.*;
+import AI.informed.A_Star;
+import AI.informed.IDA_Star;
+import AI.uninformed.*;
 import model.Board;
 import model.Cell;
 import model.Node;
@@ -38,27 +40,47 @@ public class main {
         //goal.setlockGoal(true);
 
 
+//        System.out.println("The result for BFS is:");
 //        BFS bfs = new BFS();
 //        bfs.search(start);
-
+//        System.out.println("\n----------------------------");
+//
+//
+//        System.out.println("The result for DFS is:");
 //        DFS dfs = new DFS();
 //        dfs.search(start);
+//        System.out.println("\n----------------------------");
 
-//        DLS dls = new DLS(5);
+
+//        System.out.println("The result for DLS is:");
+//        DLS dls = new DLS(12);
 //        if (!dls.search(start))
 //            System.out.println("No Solution!");
+//        System.out.println("\n----------------------------");
 //
+//
+//        System.out.println("The result for IDS is:");
 //        IDS ids = new IDS(12, gameBoard, initHash);
 //        ids.search();
+//        System.out.println("\n----------------------------");
 
+
+//        System.out.println("The result for BDS is:");
 //        BDS bds = new BDS();
 //        bds.search(start, goal);
-//
+//        System.out.println("\n----------------------------");
+
+
+//        System.out.println("The result for A* is:");
 //        A_Star as = new A_Star();
 //        as.search(start);
-
-        IDA_Star idas = new IDA_Star();
-        idas.search(start);
+//        System.out.println("\n----------------------------");
+//
+//        int cutoff = start.heuristic();
+//        System.out.println("The result for IDA* is:");
+//        IDA_Star idas = new IDA_Star();
+//        idas.search(start, cutoff);
+//
 
     }
 }

@@ -208,7 +208,7 @@ public class Node {
     }
 
     public int heuristic() {
-        return ( Math.abs(Cell.getGoal().j - currentCell.i) + Math.abs(Cell.getGoal().j - currentCell.j) ) ;
+        return ( Math.abs(Cell.getGoal().i - currentCell.i) + Math.abs(Cell.getGoal().j - currentCell.j) ) ;
     }
 
     public String hash() {

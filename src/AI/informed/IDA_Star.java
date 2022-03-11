@@ -1,4 +1,4 @@
-package AI;
+package AI.informed;
 
 import model.Node;
 
@@ -8,48 +8,36 @@ import java.util.Stack;
 
 public class IDA_Star {
 
-    protected Stack<Node> frontier = new Stack<>();
-    protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
-    //protected Hashtable<String, Boolean> explored = new Hashtable<>();
-    protected Stack<String> exp = new Stack<>();
 
-
-    public void search(Node startNode) {
-
-
-
+    public void search(Node startNode, int cutoff) {
+        Stack<Node> frontier = new Stack<>();
+        Hashtable<String, Boolean> inFrontier = new Hashtable<>();
+        Stack<String> exp = new Stack<>();
         int min = Integer.MAX_VALUE;
-        //Node temp = null;
-        boolean s = true;
-        int cutoff = startNode.heuristic();
-        while (s) {
-            exp.clear();
+        boolean s = false;
+
             frontier.add(startNode);
             inFrontier.put(startNode.hash(), true);
-            //System.out.println(cutoff);
-            min = Integer.MAX_VALUE;
-            s = false;
+
+
             while (!frontier.isEmpty()) {
-
                 Node temp = frontier.pop();
-
 
                 if (temp != startNode) {
                     while (!temp.parent.hash().equals(exp.peek())) {
-                        //System.out.println("kir shodim");
+                        //System.out.println("I'm in");
                         exp.pop();
                     }
                 }
 
 
                 inFrontier.remove(temp.hash());
-                //explored.put(temp.hash(), true);
                 exp.push(temp.hash());
 
                 if (temp.isGoal()) {
                     printResult(temp, 0);
                     System.out.println(temp.sum);
-                    return;
+                    System.exit(0);
                 }
 
                 ArrayList<Node> children = temp.successor();
@@ -74,12 +62,15 @@ public class IDA_Star {
 
             }
             cutoff = min;
-        }
 
 
+            if (s)
+                search(startNode, cutoff);
         System.out.println("no solution");
-        return;
+        System.exit(0);
+
     }
+
 
 
     public void printResult(Node node, int depthCounter) {

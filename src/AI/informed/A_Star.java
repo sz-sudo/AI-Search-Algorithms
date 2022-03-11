@@ -1,4 +1,4 @@
-package AI;
+package AI.informed;
 
 import model.Node;
 
@@ -11,10 +11,7 @@ public class A_Star {
     protected Hashtable<String, Boolean> inFrontier = new Hashtable<>();
     protected Hashtable<String, Boolean> explored = new Hashtable<>();
 
-
     public void search(Node startNode) {
-
-
 
         frontier.add(startNode);
         inFrontier.put(startNode.hash(), true);
@@ -32,8 +29,6 @@ public class A_Star {
                 }
             }
 
-
-            //Node temp = frontier.get(0);
             frontier.remove(temp);
             inFrontier.remove(temp.hash());
             explored.put(temp.hash(), true);
@@ -55,14 +50,7 @@ public class A_Star {
                     inFrontier.put(child.hash(), true);
                 }
             }
-
-
-
-
         }
-
-
-
     }
 
     public void printResult(Node node, int depthCounter) {

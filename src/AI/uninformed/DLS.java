@@ -1,12 +1,11 @@
-package AI;
+package AI.uninformed;
 
+import AI.uninformed.DFS;
 import model.Node;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
-import java.util.Stack;
 
-public class DLS extends DFS{
+public class DLS extends DFS {
     protected int currDepth = 0;
     protected int maxDepth;
 

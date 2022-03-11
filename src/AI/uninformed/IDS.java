@@ -1,5 +1,6 @@
-package AI;
+package AI.uninformed;
 
+import AI.uninformed.DLS;
 import model.Board;
 import model.Cell;
 import model.Node;
